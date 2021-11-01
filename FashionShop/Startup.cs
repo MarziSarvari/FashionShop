@@ -1,7 +1,11 @@
+using FashionShop.Data;
+using FashionShop.Repository;
+using FashionShop.Repository.IRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +31,19 @@ namespace FashionShop
         public void ConfigureServices(IServiceCollection services)
         {
 
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
+            );
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddCors(o => {
+                o.AddPolicy("AllowAll", builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -46,6 +63,8 @@ namespace FashionShop
 
             app.UseHttpsRedirection();
 
+
+            app.UseCors("AllowAll");
             app.UseRouting();
 
             app.UseAuthorization();
@@ -54,6 +73,7 @@ namespace FashionShop
             {
                 endpoints.MapControllers();
             });
+            AppDbInitializer.Seed(app);
         }
     }
 }
