@@ -67,7 +67,7 @@ namespace FashionShop
             }
 
             app.UseHttpsRedirection();
-
+            app.ConfigureExceptionHandler();
 
             app.UseCors("AllowAll");
             app.UseRouting();

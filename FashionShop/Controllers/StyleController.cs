@@ -30,17 +30,10 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStyles()
         {
-            try
-            {
-                var styles = await _unitOfWork.Styles.GetAll(includes: new List<string> { "Gender", "MaterialCategory", "Products" });
-                var result = _mapper.Map<IList<StyleDto>>(styles);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Something went wromg in the {nameof(GetStyles)}");
-                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
-            }
+
+            var styles = await _unitOfWork.Styles.GetAll(includes: new List<string> { "Gender", "MaterialCategory", "Products" });
+            var result = _mapper.Map<IList<StyleDto>>(styles);
+            return Ok(result);
 
         }
         [HttpGet("{id:int}")]
@@ -48,17 +41,11 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStyle(int id)
         {
-            try
-            {
-                var style = await _unitOfWork.Styles.Get(q => q.Id == id, new List<string> { "Gender", "MaterialCategory" , "Products" });
-                var result = _mapper.Map<StyleDto>(style);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Something went wromg in the {nameof(GetStyles)}");
-                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
-            }
+
+            var style = await _unitOfWork.Styles.Get(q => q.Id == id, new List<string> { "Gender", "MaterialCategory", "Products" });
+            var result = _mapper.Map<StyleDto>(style);
+            return Ok(result);
+
 
         }
 
