@@ -13,12 +13,12 @@ namespace FashionShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StyleController : ControllerBase
+    public class GenderController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<StyleController> _logger;
-        public StyleController(IUnitOfWork unitOfWork, ILogger<StyleController> logger, IMapper mapper)
+        private readonly ILogger<GenderController> _logger;
+        public GenderController(IUnitOfWork unitOfWork, ILogger<GenderController> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
@@ -28,17 +28,17 @@ namespace FashionShop.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStyles()
+        public async Task<IActionResult> GetGenders()
         {
             try
             {
-                var styles = await _unitOfWork.Styles.GetAll(includes: new List<string> { "Gender", "MaterialCategory", "Products" });
-                var result = _mapper.Map<IList<StyleDto>>(styles);
+                var genders = await _unitOfWork.Genders.GetAll(includes: new List<string> { "Styles" });
+                var result = _mapper.Map<IList<GenderDto>>(genders);
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wromg in the {nameof(GetStyles)}");
+                _logger.LogError(ex, $"Something went wromg in the {nameof(GetGenders)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
 
@@ -46,17 +46,17 @@ namespace FashionShop.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStyle(int id)
+        public async Task<IActionResult> GetGender(int id)
         {
             try
             {
-                var style = await _unitOfWork.Styles.Get(q => q.Id == id, new List<string> { "Gender", "MaterialCategory" , "Products" });
-                var result = _mapper.Map<StyleDto>(style);
+                var gender = await _unitOfWork.Genders.Get(q => q.Id == id, new List<string> { "Style" });
+                var result = _mapper.Map<GenderDto>(gender);
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wromg in the {nameof(GetStyles)}");
+                _logger.LogError(ex, $"Something went wromg in the {nameof(GetGenders)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
 

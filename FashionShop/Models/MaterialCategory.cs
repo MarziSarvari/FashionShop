@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FashionShop.Models
@@ -19,5 +20,8 @@ namespace FashionShop.Models
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
+
+        public virtual IList<Style> Styles { get; set; }
+
     }
 }

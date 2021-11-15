@@ -32,6 +32,9 @@ namespace FashionShop.Models
 
         public string ImageUrl { get; set; }
 
+        public virtual IList<ProductSize> ProductSizes { get; set; }
+
+
 
 
 

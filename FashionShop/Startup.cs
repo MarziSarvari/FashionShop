@@ -1,4 +1,6 @@
+using AutoMapper;
 using FashionShop.Data;
+using FashionShop.Models.Map;
 using FashionShop.Repository;
 using FashionShop.Repository.IRepository;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +38,7 @@ namespace FashionShop
                 options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
             );
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(typeof(MapperInitializer));
 
             services.AddCors(o => {
                 o.AddPolicy("AllowAll", builder =>
@@ -49,6 +52,8 @@ namespace FashionShop
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FashionShop", Version = "v1" });
             });
+            services.AddControllers().AddNewtonsoftJson(op =>
+            op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

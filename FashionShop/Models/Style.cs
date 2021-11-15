@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FashionShop.Models
@@ -25,6 +26,8 @@ namespace FashionShop.Models
         public bool Active { get; set; } = true;
 
         public string Description { get; set; }
+
+        public virtual IList<Product> Products { get; set; }
 
 
 
