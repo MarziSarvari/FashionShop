@@ -1,13 +1,14 @@
 ﻿using FashionShop.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FashionShop.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApiUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
@@ -29,6 +30,12 @@ namespace FashionShop.Data
         public DbSet<Material> Materials { get; set; }
 
         public DbSet<MaterialCategory> MaterialCategories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new RoleConfiguration());
+        }
 
 
     }

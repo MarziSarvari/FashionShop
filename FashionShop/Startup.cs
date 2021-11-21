@@ -3,9 +3,11 @@ using FashionShop.Data;
 using FashionShop.Models.Map;
 using FashionShop.Repository;
 using FashionShop.Repository.IRepository;
+using FashionShop.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,13 +34,16 @@ namespace FashionShop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"),
+                x => x.MigrationsAssembly("Data.Migrations"))
             );
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MapperInitializer));
+            services.AddScoped<IAuthManager, AuthManager>();
 
             services.AddCors(o => {
                 o.AddPolicy("AllowAll", builder =>
@@ -59,6 +64,7 @@ namespace FashionShop
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -72,6 +78,7 @@ namespace FashionShop
             app.UseCors("AllowAll");
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,6 +1,7 @@
 ﻿//using Marvin.Cache.Headers;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FashionShop.Data;
 using FashionShop.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -21,36 +22,36 @@ namespace FashionShop
 {
     public static class ServiceExtentions
     {
-        //public static void ConfigureIdentity(this IServiceCollection services)
-        //{
-        //    var builder = services.AddIdentityCore<ApiUser>(q => { q.User.RequireUniqueEmail = true; });
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentityCore<ApiUser>(q => { q.User.RequireUniqueEmail = true; });
 
-        //    builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
-        //    builder.AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
-        //}
-        //public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
-        //{
-        //    var jwtSettings = Configuration.GetSection("Jwt");
-        //    var key = Environment.GetEnvironmentVariable("KEY");
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
+            builder.AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+        }
+        public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
+        {
+            var jwtSettings = Configuration.GetSection("Jwt");
+            var key = Environment.GetEnvironmentVariable("FashionShopKey");
 
-        //    services.AddAuthentication(o =>
-        //    {
-        //        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    })
-        //    .AddJwtBearer(o =>
-        //    {
-        //        o.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            ValidateIssuer = true,
-        //            ValidateAudience = false,
-        //            ValidateLifetime = true,
-        //            ValidateIssuerSigningKey = true,
-        //            ValidIssuer = jwtSettings.GetSection("Issuer").Value,
-        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-        //        };
-        //    });
-        //}
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                };
+            });
+        }
 
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {

@@ -3,6 +3,7 @@ using FashionShop.Models.Dtos;
 using FashionShop.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -30,9 +31,7 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetGenders()
         {
-            throw new Exception();
-
-            var genders = await _unitOfWork.Genders.GetAll(includes: new List<string> { "Styles" });
+            var genders = await _unitOfWork.Genders.GetAll(include: q => q.Include(x => x.Styles));
             var result = _mapper.Map<IList<GenderDto>>(genders);
             return Ok(result);
 
@@ -45,7 +44,7 @@ namespace FashionShop.Controllers
         public async Task<IActionResult> GetGender(int id)
         {
 
-            var gender = await _unitOfWork.Genders.Get(q => q.Id == id, new List<string> { "Style" });
+            var gender = await _unitOfWork.Genders.Get(q => q.Id == id, include: q => q.Include(x => x.Styles));
             var result = _mapper.Map<GenderDto>(gender);
             return Ok(result);
         }

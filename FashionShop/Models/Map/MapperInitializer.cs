@@ -11,6 +11,8 @@ namespace FashionShop.Models.Map
     {
         public MapperInitializer()
         {
+            
+
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
             //CreateMap<Category, UpdateCategoryDto>().ReverseMap();
@@ -44,7 +46,9 @@ namespace FashionShop.Models.Map
 
             CreateMap<Style, StyleDto>().ReverseMap();
             CreateMap<Style, CreateStyleDto>().ReverseMap();
-           // CreateMap<Style, UpdateStyleDto>().ReverseMap();
+            // CreateMap<Style, UpdateStyleDto>().ReverseMap();
+
+            CreateMap<ApiUser, UserDTO>().ReverseMap();
 
         }
     }

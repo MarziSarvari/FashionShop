@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FashionShop.Models.Dtos;
 using FashionShop.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,13 +27,14 @@ namespace FashionShop.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStyles()
         {
-
-            var styles = await _unitOfWork.Styles.GetAll(includes: new List<string> { "Gender", "MaterialCategory", "Products" });
+          
+            var styles = await _unitOfWork.Styles.GetAll(include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
             var result = _mapper.Map<IList<StyleDto>>(styles);
             return Ok(result);
 
@@ -42,7 +45,7 @@ namespace FashionShop.Controllers
         public async Task<IActionResult> GetStyle(int id)
         {
 
-            var style = await _unitOfWork.Styles.Get(q => q.Id == id, new List<string> { "Gender", "MaterialCategory", "Products" });
+            var style = await _unitOfWork.Styles.Get(q => q.Id == id,include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
             var result = _mapper.Map<StyleDto>(style);
             return Ok(result);
 
