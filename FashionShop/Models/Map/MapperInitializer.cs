@@ -22,7 +22,9 @@ namespace FashionShop.Models.Map
            // CreateMap<Color, UpdateColorDto>().ReverseMap();
 
             CreateMap<Gender, GenderDto>().ReverseMap();
-          
+            CreateMap<Gender, CreateGenderDto>().ReverseMap();
+            CreateMap<Gender, UpdateGenderDto>().ReverseMap();
+
 
             CreateMap<Material, MaterialDto>().ReverseMap();
             CreateMap<Material, CreateMaterialDto>().ReverseMap();

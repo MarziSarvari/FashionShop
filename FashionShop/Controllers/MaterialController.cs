@@ -16,12 +16,12 @@ namespace FashionShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StyleController : ControllerBase
+    public class MaterialController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<StyleController> _logger;
-        public StyleController(IUnitOfWork unitOfWork, ILogger<StyleController> logger, IMapper mapper)
+        private readonly ILogger<MaterialController> _logger;
+        public MaterialController(IUnitOfWork unitOfWork, ILogger<MaterialController> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
@@ -32,11 +32,11 @@ namespace FashionShop.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStyles()
+        public async Task<IActionResult> GetMaterials()
         {
           
-            var styles = await _unitOfWork.Styles.GetAll(include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
-            var result = _mapper.Map<IList<StyleDto>>(styles);
+            var materials = await _unitOfWork.Materials.GetAll(include: q => q.Include(x => x.MaterialCategories).ThenInclude(i => i.Category));
+            var result = _mapper.Map<IList<MaterialDto>>(materials);
             return Ok(result);
 
         }
@@ -44,11 +44,11 @@ namespace FashionShop.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStyle(int id)
+        public async Task<IActionResult> GetMaterial(int id)
         {
 
-            var style = await _unitOfWork.Styles.Get(q => q.Id == id,include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
-            var result = _mapper.Map<StyleDto>(style);
+            var material = await _unitOfWork.Materials.Get(q => q.Id == id, include: q => q.Include(x => x.MaterialCategories).ThenInclude(i => i.Category));
+            var result = _mapper.Map<MaterialDto>(material);
             return Ok(result);
 
 
@@ -60,19 +60,19 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateStyle([FromBody] CreateStyleDto styleDTO)
+        public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialDto materialDTO)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogInformation($"Invalid Post Attempt in { nameof(CreateStyle)}");
+                _logger.LogInformation($"Invalid Post Attempt in { nameof(CreateMaterial)}");
                 return BadRequest("Invalid Data Inserted");
             }
 
-            var style = _mapper.Map<Style>(styleDTO);
-            await _unitOfWork.Styles.Insert(style);
+            var material = _mapper.Map<Material>(materialDTO);
+            await _unitOfWork.Materials.Insert(material);
             await _unitOfWork.Save();
 
-            return Created("GetStyle", style);
+            return Created("GetMaterial", material);
 
 
         }
@@ -81,22 +81,22 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateStyle(int id, [FromBody] UpdateStyleDto StyleDTO)
+        public async Task<IActionResult> UpdateMaterial(int id, [FromBody] UpdateMaterialDto materialDTO)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogInformation($"Invalid Update Attempt in { nameof(UpdateStyle)}");
+                _logger.LogInformation($"Invalid Update Attempt in { nameof(UpdateMaterial)}");
                 return BadRequest("Invalid Data Inserted");
             }
 
-            var Style = await _unitOfWork.Styles.Get(q => q.Id == id);
-            if (Style == null)
+            var material = await _unitOfWork.Materials.Get(q => q.Id == id);
+            if (material == null)
             {
-                _logger.LogInformation($"Invalid Update Attempt in { nameof(UpdateStyle)}");
+                _logger.LogInformation($"Invalid Update Attempt in { nameof(UpdateMaterial)}");
                 return BadRequest("Invalid Data Inserted");
             }
-            _mapper.Map(StyleDTO, Style);
-            _unitOfWork.Styles.Update(Style);
+            _mapper.Map(materialDTO, material);
+            _unitOfWork.Materials.Update(material);
             await _unitOfWork.Save();
             return NoContent();
 
@@ -107,23 +107,23 @@ namespace FashionShop.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteStyle(int id)
+        public async Task<IActionResult> DeleteMaterial(int id)
         {
             if (id < 1)
             {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteStyle)}");
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteMaterial)}");
                 return BadRequest();
             }
 
 
-            var Style = await _unitOfWork.Styles.Get(q => q.Id == id);
-            if (Style == null)
+            var material = await _unitOfWork.Materials.Get(q => q.Id == id);
+            if (material == null)
             {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteStyle)}");
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteMaterial)}");
                 return BadRequest("Submitted data is invalid");
             }
 
-            await _unitOfWork.Styles.Delete(id);
+            await _unitOfWork.Materials.Delete(id);
             await _unitOfWork.Save();
 
             return NoContent();

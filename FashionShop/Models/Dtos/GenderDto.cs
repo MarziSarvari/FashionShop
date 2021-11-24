@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace FashionShop.Models.Dtos
 {
-    public class GenderDto
+    public class GenderDto :CreateGenderDto
     {
-        public int Id { get; set; }
+        public int Id { get; set; }    
+        public IList<StyleDto> Styles { get; set; }
 
+    }
+    public class CreateGenderDto
+    {
         [Required]
         public string Name { get; set; }
+
+    }
+    public class UpdateGenderDto : CreateGenderDto
+    {
         public IList<StyleDto> Styles { get; set; }
 
     }
