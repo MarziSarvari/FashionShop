@@ -8,8 +8,7 @@ namespace FashionShop.Models.Dtos
         [Required]
         public int StyleId { get; set; }
         public string Description { get; set; }
-        [Required]
-        public double Price { get; set; }
+        
         [Required]
         public int ColorId { get; set; }
         public bool Active { get; set; } = true;
