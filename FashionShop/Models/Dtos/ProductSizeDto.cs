@@ -8,6 +8,8 @@ namespace FashionShop.Models.Dtos
         public int ProductId { get; set; }
         [Required]
         public int SizeId { get; set; }
+        [Required]
+        public double Price { get; set; }
 
 
     }
