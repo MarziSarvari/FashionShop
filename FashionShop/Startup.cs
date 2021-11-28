@@ -38,8 +38,7 @@ namespace FashionShop
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"),
-                x => x.MigrationsAssembly("Data.Migrations"))
+                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
             );
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MapperInitializer));
@@ -62,7 +61,7 @@ namespace FashionShop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,AppDbContext dbContext)
         {
             
             if (env.IsDevelopment())
@@ -71,7 +70,7 @@ namespace FashionShop
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FashionShop v1"));
             }
-
+            dbContext.Database.Migrate();
             app.UseHttpsRedirection();
             app.ConfigureExceptionHandler();
 

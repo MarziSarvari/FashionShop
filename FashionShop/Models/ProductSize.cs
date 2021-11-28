@@ -15,6 +15,9 @@ namespace FashionShop.Models
         public Product Product { get; set; }
 
         [Required]
+        public double Price { get; set; }
+
+        [Required]
         public int SizeId { get; set; }
 
         [ForeignKey("SizeId")]

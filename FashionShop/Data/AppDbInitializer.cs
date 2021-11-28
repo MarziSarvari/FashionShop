@@ -13,7 +13,7 @@ namespace FashionShop.Data
     {
         public static async void Seed(IApplicationBuilder applicationBuilder)
         {
-            
+
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<IUnitOfWork>();
@@ -228,7 +228,6 @@ namespace FashionShop.Data
                     await context.Products.InsertRange(new List<Product>() {new Product()
                     {
                         StyleId = 2,
-                        Price = 300000,
                         Description = "Long Shirt",
                         Active =true,
                         ColorId =5
@@ -236,21 +235,18 @@ namespace FashionShop.Data
                    new Product()
                    {
                        StyleId = 3,
-                       Price = 350000,
                        Description = "Extra Long Shirt",
                        Active =true,
                        ColorId =1
                    }, new Product()
                    {
-                       StyleId = 4,
-                       Price = 250000,
+                       StyleId = 4,                       
                        Description = "Short Shirt",
                        Active =true,
                        ColorId =2
                    }, new Product()
                    {
-                       StyleId = 1,
-                       Price = 200000,
+                       StyleId = 1,                       
                        Description = "Long Pants",
                        Active =true,
                        ColorId =3
@@ -264,92 +260,112 @@ namespace FashionShop.Data
                     IEnumerable<ProductSize> productSizes = new List<ProductSize>(){new ProductSize()
                     {
                         ProductId=1,
+                        Price = 300000,
                         SizeId = 1
                     },
                    new ProductSize()
                    {
                         ProductId=1,
+                        Price = 320000,
                         SizeId = 2
                    },
                         new ProductSize()
                    {
                         ProductId=1,
+                        Price = 350000,
                         SizeId = 3
                    }, new ProductSize()
                    {
                        ProductId=1,
-                        SizeId = 4
+                       Price = 360000,
+                       SizeId = 4
                    }, new ProductSize()
                    {
                        ProductId=1,
-                        SizeId = 5
+                       Price = 360000,
+                       SizeId = 5
                    } ,
                     new ProductSize()
                     {
                         ProductId=2,
+                        Price = 360000,
                         SizeId = 1
                     },
                    new ProductSize()
                    {
                         ProductId=2,
+                        Price = 360000,
                         SizeId = 2
                    },
                         new ProductSize()
                    {
                         ProductId=2,
+                        Price = 360000,
                         SizeId = 3
                    }, new ProductSize()
                    {
                        ProductId=2,
+                       Price = 360000,
                         SizeId = 4
                    }, new ProductSize()
                    {
                        ProductId=2,
+                       Price = 360000,
                         SizeId = 5
                    },
                     new ProductSize()
                     {
                         ProductId=3,
+                        Price = 400000,
                         SizeId = 1
                     },
                    new ProductSize()
                    {
                         ProductId=3,
+                        Price = 410000,
                         SizeId = 2
                    },
                         new ProductSize()
                    {
                         ProductId=3,
+                        Price = 420000,
                         SizeId = 3
                    }, new ProductSize()
                    {
                        ProductId=3,
+                       Price = 430000,
                         SizeId = 4
                    }, new ProductSize()
                    {
                        ProductId=3,
+                       Price = 440000,
                         SizeId = 5
                    },new ProductSize()
                     {
                         ProductId=4,
+                        Price=200000,
                         SizeId = 1
                     },
                    new ProductSize()
                    {
                         ProductId=4,
+                        Price=200000,
                         SizeId = 2
                    },
                         new ProductSize()
                    {
                         ProductId=4,
+                        Price=220000,
                         SizeId = 3
                    }, new ProductSize()
                    {
                        ProductId=4,
+                       Price=220000,
                         SizeId = 4
                    }, new ProductSize()
                    {
                        ProductId=4,
+                       Price=220000,
                         SizeId = 5
                    }};
                     await context.ProductSizes.InsertRange(productSizes);
