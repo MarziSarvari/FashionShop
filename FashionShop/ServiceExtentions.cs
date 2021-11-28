@@ -1,4 +1,4 @@
-﻿//using Marvin.Cache.Headers;
+﻿using Marvin.Cache.Headers;
 using FashionShop.Data;
 using FashionShop.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -74,16 +74,16 @@ namespace FashionShop
             });
         }
 
-        //public static void ConfigureVersioning(this IServiceCollection services)
-        //{
-        //    services.AddApiVersioning(opt =>
-        //    {
-        //        opt.ReportApiVersions = true;
-        //        opt.AssumeDefaultVersionWhenUnspecified = true;
-        //        opt.DefaultApiVersion = new ApiVersion(1, 0);
-        //        opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
-        //    });
-        //}
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
+        }
 
         //public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
         //{

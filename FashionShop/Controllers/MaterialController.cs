@@ -32,10 +32,10 @@ namespace FashionShop.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetMaterials()
+        public async Task<IActionResult> GetMaterials([FromQuery] RequestParams requestParams)
         {
           
-            var materials = await _unitOfWork.Materials.GetAll(include: q => q.Include(x => x.MaterialCategories).ThenInclude(i => i.Category));
+            var materials = await _unitOfWork.Materials.GetAll(requestParams, include: q => q.Include(x => x.MaterialCategories).ThenInclude(i => i.Category));
             var result = _mapper.Map<IList<MaterialDto>>(materials);
             return Ok(result);
 

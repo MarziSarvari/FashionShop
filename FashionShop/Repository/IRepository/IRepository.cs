@@ -16,7 +16,7 @@ namespace FashionShop.Repository.IRepository
              Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
              Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null
           );
-        Task<IPagedList<T>> GetPagedList(
+        Task<IPagedList<T>> GetAll(
             RequestParams requestParams,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null
             );

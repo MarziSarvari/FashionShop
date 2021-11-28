@@ -32,10 +32,9 @@ namespace FashionShop.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery] RequestParams requestParams)
         {
-          
-            var products = await _unitOfWork.Products.GetAll(include: q => q.Include(x => x.ProductSizes).ThenInclude(x => x.Size).Include(x => x.Color).Include(x => x.Style).ThenInclude(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.Style).ThenInclude(x => x.MaterialCategory).ThenInclude(i => i.Category).Include(x => x.Style).ThenInclude(x => x.Gender));
+            var products = await _unitOfWork.Products.GetAll(requestParams, include: q => q.Include(x => x.ProductSizes).ThenInclude(x => x.Size).Include(x => x.Color).Include(x => x.Style).ThenInclude(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.Style).ThenInclude(x => x.MaterialCategory).ThenInclude(i => i.Category).Include(x => x.Style).ThenInclude(x => x.Gender));
             var result = _mapper.Map<IList<ProductDto>>(products);
             return Ok(result);
 
