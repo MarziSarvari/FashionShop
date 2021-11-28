@@ -30,11 +30,15 @@ namespace FashionShop.Controllers
 
         [Authorize]
         [HttpGet]
+        [ResponseCache(CacheProfileName = "120SecondsDuration")]
+        // Can be used to override global caching on a particular endpoint at any point. 
+        ////[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
+        ////[HttpCacheValidation(MustRevalidate = false)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStyles([FromQuery] RequestParams requestParams)
         {
-          
+
             var styles = await _unitOfWork.Styles.GetAll(requestParams, include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
             var result = _mapper.Map<IList<StyleDto>>(styles);
             return Ok(result);
@@ -47,7 +51,7 @@ namespace FashionShop.Controllers
         public async Task<IActionResult> GetStyle(int id)
         {
 
-            var style = await _unitOfWork.Styles.Get(q => q.Id == id,include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
+            var style = await _unitOfWork.Styles.Get(q => q.Id == id, include: q => q.Include(x => x.Gender).Include(x => x.Products).Include(x => x.MaterialCategory).ThenInclude(i => i.Material).Include(x => x.MaterialCategory).ThenInclude(i => i.Category));
             var result = _mapper.Map<StyleDto>(style);
             return Ok(result);
 
@@ -76,7 +80,7 @@ namespace FashionShop.Controllers
 
 
         }
-        [Authorize (Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AspNetCoreRateLimit;
 
 namespace FashionShop
 {
@@ -85,42 +86,42 @@ namespace FashionShop
             });
         }
 
-        //public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
-        //{
-        //    services.AddResponseCaching();
-        //    services.AddHttpCacheHeaders(
-        //        (expirationOpt) =>
-        //        {
-        //            expirationOpt.MaxAge = 120;
-        //            expirationOpt.CacheLocation = CacheLocation.Private;
-        //        },
-        //        (validationOpt) =>
-        //        {
-        //            validationOpt.MustRevalidate = true;
-        //        }
-        //    );
-        //}
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+            services.AddHttpCacheHeaders(
+                (expirationOpt) =>
+                {
+                    expirationOpt.MaxAge = 120;
+                    expirationOpt.CacheLocation = CacheLocation.Private;
+                },
+                (validationOpt) =>
+                {
+                    validationOpt.MustRevalidate = true;
+                }
+            );
+        }
 
-        //public static void ConfigureRateLimiting(this IServiceCollection services)
-        //{
-        //    var rateLimitRules = new List<RateLimitRule>
-        //    {
-        //        new RateLimitRule
-        //        {
-        //            Endpoint = "*",
-        //            Limit= 1,
-        //            Period = "5s"
-        //        }
-        //    };
-        //    services.Configure<IpRateLimitOptions>(opt =>
-        //    {
-        //        opt.GeneralRules = rateLimitRules;
-        //    });
-        //    services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
-        //    services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
-        //    services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-        //    services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-        //}
+        public static void ConfigureRateLimiting(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit= 1,
+                    Period = "5s"
+                }
+            };
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules = rateLimitRules;
+            });
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+        }
 
 
     }

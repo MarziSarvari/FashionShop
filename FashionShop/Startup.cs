@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using AutoMapper;
 using FashionShop.Data;
 using FashionShop.Models.Map;
@@ -51,14 +52,23 @@ namespace FashionShop
                     .AllowAnyHeader());
             });
 
+            services.AddMemoryCache();//rate limiting
+            services.ConfigureRateLimiting();//rate limiting
+            services.AddHttpContextAccessor();//rate limiting
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FashionShop", Version = "v1" });
             });
-            services.AddControllers().AddNewtonsoftJson(op =>
+            services.AddControllers(/*config => {
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                {
+                    Duration = 120
+                });
+            }*/).AddNewtonsoftJson(op =>
             op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddApiVersioning();
+            //services.AddApiVersioning();
+            services.ConfigureHttpCacheHeaders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,8 +85,12 @@ namespace FashionShop
             app.UseHttpsRedirection();
             app.ConfigureExceptionHandler();
 
+            
             app.UseCors("AllowAll");
             app.UseRouting();
+            app.UseIpRateLimiting();//rate limiting
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
 
             app.UseAuthentication();
             app.UseAuthorization();
