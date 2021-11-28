@@ -4,14 +4,16 @@ using FashionShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FashionShop.Migrations
+namespace FashionShop.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211124095002_CreatingDatabase")]
+    partial class CreatingDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,9 +206,6 @@ namespace FashionShop.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<int>("StyleId")
                         .HasColumnType("int");
 
@@ -225,6 +224,9 @@ namespace FashionShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -321,15 +323,15 @@ namespace FashionShop.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5c741fde-9bbf-44dc-a44b-376d99f3191d",
-                            ConcurrencyStamp = "50cd330e-b8de-4a6f-8806-650a780623a4",
+                            Id = "599cbd75-1ad1-4ea0-92c5-7a5d57c9619d",
+                            ConcurrencyStamp = "ab0e3ff3-400f-4dd2-a8c0-c93d8eb50291",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "40a41aeb-5a49-445b-bae8-0373cfdb3ad7",
-                            ConcurrencyStamp = "4b509566-9a4a-450a-806f-b2f72d9ece18",
+                            Id = "843969c6-194a-49c6-9545-dcba0fd8b623",
+                            ConcurrencyStamp = "59fa072f-2f7e-4658-81f7-55da26d131f5",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
