@@ -78,9 +78,14 @@ namespace FashionShop
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FashionShop v1"));
+               
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+                c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "FashionShop v1");
+            });
             dbContext.Database.Migrate();
             app.UseHttpsRedirection();
             app.ConfigureExceptionHandler();
